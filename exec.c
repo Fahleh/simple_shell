@@ -63,16 +63,12 @@ void executeCommand(char *cmd, char **av, char **env)
 	{
 		return;
 	}
-	if (strcmp(args[0], "exit") == 0)
+
+	if (_checkKeyword(args, cmd, av, env))
 	{
-		free(cmd);
-		exit(EXIT_SUCCESS);
-	}
-	if (strcmp(args[0], "env") == 0)
-	{
-		_printEnv(env);
 		return;
 	}
+
 	/* check if command string contains / */
 	if (strchr(args[0], '/') != NULL)
 	{

@@ -60,3 +60,46 @@ bool _testCommand(char *path)
 
 	return (access(path, X_OK) == 0);
 }
+
+/**
+ * _checkKeyword - A function that checks for certain keywords
+ * @args: Tokenized command arguments.
+ * @cmd: User commands.
+ * @av: Command-line arguments.
+ * @env: The executing environment.
+ *
+ * Return: 1 if match found, 0 otherwise.
+ */
+
+int _checkKeyword(char **args, char *cmd, char **av, char **env)
+{
+	if (strcmp(args[0], "exit") == 0)
+	{
+		if (args[1] != NULL)
+		{
+			_exitCmd(args, av, cmd);
+			return (1);
+		}
+		else
+		{
+			free(cmd);
+			exit(EXIT_SUCCESS);
+		}
+	}
+	else if (strcmp(args[0], "env") == 0)
+	{
+		_printEnv(env);
+		return (1);
+	}
+	else if (strcmp(args[0], "setenv") == 0)
+	{
+		_setEnv(args[1], args[2]);
+		return (1);
+	}
+	else if (strcmp(args[0], "unsetenv") == 0)
+	{
+		_unsetEnv(args[1]);
+		return (1);
+	}
+	return (0);
+}
