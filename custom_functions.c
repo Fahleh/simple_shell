@@ -42,42 +42,85 @@ ssize_t _getLine(char **line, size_t *s, FILE *stream)
 	size_t i = 0;
 	char *temp;
 
-    if (!line || !s) {
-        return (-1);
-    }
-
-
-    /* Allocate initial buffer or resize if needed */
-    if (*line == NULL || *s == 0) {
-        *s = 128;  /* Initial buffer size */
-        *line = (char *)malloc(*s);
-        if (*line == NULL) {
-            return (-1);  /* Memory allocation failure */
-        }
-    }
-
-    while ((c = fgetc(stream)) != EOF && c != '\n')
-    {
-        if (i >= *s - 1) {
-            /* Resize the buffer */
-            *s *= 2;
-            temp = (char *)realloc(*line, *s);
-            if (temp == NULL) {
-                free(*line);
-                *line = NULL;
-                return (-1);  /* Memory allocation failure */
-            }
-            *line = temp;
-        }
-        (*line)[i++] = (char)c;
-    }
-
-    if (i == 0 && c == EOF) {
-        return (-1);  /* No characters read, reached end of file */
-    }
-
-    (*line)[i] = '\0';  /* Null-terminate the string */
-
-    return (i);  /* Return the number of characters read */
+	if (!line || !s)
+	{
+		return (-1);
+	}
+	if (*line == NULL || *s == 0)
+	{
+		*s = INPUT_BUFFER;  /* Initial buffer size */
+		*line = (char *)malloc(*s);
+		if (*line == NULL)
+		{
+			perror("malloc");
+			return (-1);
+		}
+	}
+	while ((c = fgetc(stream)) != EOF && c != '\n')
+	{
+		if (i >= *s - 1)
+		{
+			*s *= 2;
+			temp = (char *)realloc(*line, *s);
+			if (temp == NULL)
+			{
+				free(*line);
+				*line = NULL;
+				perror("realloc");
+				return (-1);
+			}
+			*line = temp;
+		}
+		(*line)[i++] = (char)c;
+	}
+	if (i == 0 && c == EOF)
+		return (-1);
+	(*line)[i] = '\0';  /* Null-terminate the string */
+	return (i);
 }
 
+
+/**
+ * _strTok - A function that splits a string into substings(tokens).
+ * @str: string to be tokenized
+ * @delim: token delimiter
+ * Return: token
+ */
+
+char *_strTok(char *str, const char *delim)
+{
+	static char *lastToken;
+	char *token;
+
+	if (str != NULL)
+	{
+		lastToken = str;
+	}
+	else if (lastToken == NULL)
+	{
+		return (NULL);  /* No more tokens */
+	}
+	/* Find the next delimiter in the string */
+	token = lastToken;
+
+	/* Skip-over starting delims */
+	while (*lastToken != '\0' && strchr(delim, *lastToken) != NULL)
+	{
+		lastToken++;
+	}
+	if (*lastToken != '\0')
+	{
+		token = lastToken;
+		while (*lastToken != '\0' && strchr(delim, *lastToken) == NULL)
+		{
+			lastToken++;
+		}
+		if (*lastToken != '\0')
+		{
+			*lastToken++ = '\0';
+		}
+		return (token);
+	}
+	lastToken = NULL;
+	return (NULL);
+}

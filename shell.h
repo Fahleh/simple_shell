@@ -30,6 +30,7 @@ void _printEnv(char **env);
 void _printf(const char *fmt, ...);
 void _handleSignal(int sig);
 ssize_t _getLine(char **line, size_t *s, FILE *stream);
+char *_strTok(char *str, const char *delim);
 
 
 /* HELPER FUNCTIONS */

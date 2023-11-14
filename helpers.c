@@ -11,14 +11,14 @@ void _tokenize(char *cmd, char **args)
 {
 
 	int i = 0;
-	char *token = strtok(cmd, DELIM);
+	char *token = _strTok(cmd, DELIM);
 
 
 	while (token)
 	{
 		args[i] = token;
 		i++;
-		token = strtok(NULL, DELIM);
+		token = _strTok(NULL, DELIM);
 
 	}
 	args[i] = NULL;
