@@ -39,6 +39,7 @@ void _handleSignal(int sig);
 ssize_t _getLine(char **line, size_t *s, FILE *stream);
 char *_strTok(char *str, const char *delim);
 void _exitCmd(char **args, char **av, char *cmd);
+int _operatorCheck(char *cmd, char **av, char **env);
 
 
 /* HELPER FUNCTIONS */

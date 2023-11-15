@@ -58,6 +58,9 @@ void executeCommand(char *cmd, char **av, char **env)
 	char *args[INPUT_BUFFER];
 	char *path;
 
+	if (_operatorCheck(cmd, av, env) == 0)
+		return;
+
 	_tokenize(cmd, args);
 
 	if (args[0] == NULL)
