@@ -18,7 +18,8 @@ void _exitCmd(char **args, char **av, char *cmd)
 			{
 				fprintf(stderr, "%s: 1: %s: Illegal number: %s\n"
 						, av[0], args[0], args[1]);
-				return;
+				free(cmd);
+				exit(2);
 			}
 		}
 		status = atoi(args[1]);

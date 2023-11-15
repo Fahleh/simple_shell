@@ -1,5 +1,6 @@
 #ifndef MAIN_H
 #define MAIN_H
+#define _GNU_SOURCE
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,7 +29,8 @@ void _fork(char *path, char **args, char **av, char **env);
 void _printEnv(char **env);
 int _setEnv(const char *var, const char *val);
 int _unsetEnv(const char *var);
-
+int _handleCD(char **args);
+int _updateEnv(char *currDir);
 
 
 /* CUSTOM FUNCTIONS */

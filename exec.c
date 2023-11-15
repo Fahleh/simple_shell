@@ -36,9 +36,10 @@ void _fork(char *path, char **args, char **av, char **env)
 	{
 		waitpid(pid, &status, 0);
 
-		if (WIFEXITED(status))
+		if (!WIFEXITED(status))
 		{
-			WEXITSTATUS(status);
+			free(path);
+			exit(status);
 		}
 
 		free(path);

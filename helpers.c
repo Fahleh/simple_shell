@@ -101,5 +101,13 @@ int _checkKeyword(char **args, char *cmd, char **av, char **env)
 		_unsetEnv(args[1]);
 		return (1);
 	}
+	else if (strcmp(args[0], "cd") == 0)
+	{
+		if (_handleCD(args) == -1)
+		{
+			fprintf(stderr, "cd: Failed to change directory\n");
+		}
+		return (1);
+	}
 	return (0);
 }

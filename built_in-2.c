@@ -15,6 +15,7 @@ int _setEnv(const char *var, const char *val)
 		return (-1);
 	}
 
+
 	if (setenv(var, val, 1) == -1)
 	{
 		perror("setenv");
@@ -45,3 +46,81 @@ int _unsetEnv(const char *var)
 	return (0);
 }
 
+/**
+ * _handleCD - changes directory
+ * @args: Command arguments.
+ * Return: 0 on success, -1 otherwise.
+ */
+
+int _handleCD(char **args)
+{
+	char *newDir, *currDir;
+
+	if (args[1] == NULL)
+	{
+		newDir = getenv("HOME");
+	}
+	else if (strcmp(args[1], "-") == 0)
+	{
+		newDir = getenv("OLDPWD");
+		if (newDir == NULL)
+		{
+			fprintf(stderr, "cd: OLDPWD not set\n");
+			return (-1);
+		}
+	}
+	else
+	{
+		newDir = args[1];
+	}
+
+	currDir = getcwd(NULL, 0);
+	if (currDir == NULL)
+	{
+		perror("getcwd");
+		return (-1);
+	}
+	if (chdir(newDir) == -1)
+	{
+		perror("chdir");
+		free(currDir);
+		return (-1);
+	}
+	if (_updateEnv(currDir) == -1)
+	{
+		free(currDir);
+		return (-1);
+	}
+	free(currDir);
+	return (0);
+
+}
+
+
+/**
+ * _updateEnv - Updates the PWD variable after directory change.
+ * @currDir: The current working directory.
+ * Return: 0 on success, -1 otherwise.
+ */
+
+int _updateEnv(char *currDir)
+{
+	char *pwd;
+
+	pwd = NULL;
+	asprintf(&pwd, "PWD=%s", currDir);
+
+	if (pwd == NULL)
+	{
+		perror("asprintf");
+		return (-1);
+	}
+
+	if (_setEnv("OLDPWD", currDir) == -1 || _setEnv("PWD", currDir) == -1)
+	{
+		free(pwd);
+		return (-1);
+	}
+	free(pwd);
+	return (0);
+}
